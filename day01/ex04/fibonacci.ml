@@ -1,16 +1,14 @@
 let fibonacci n =
   if n < 0 then
-    -1
+    (-1)
   else
-    let rec loop n =
-      if n = 0 then
-        0
-      else if n = 1 then
-        1
+    let rec loop i curr prev =
+      if i = 0 then
+        prev
       else
-        (loop (n - 2)) + (loop (n - 1))
+        loop (i - 1) (curr + prev) curr;
     in
-    loop n
+    loop n 1 0
 
 let () =
   print_endline (string_of_int (fibonacci (-42)));

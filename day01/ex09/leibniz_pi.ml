@@ -12,7 +12,7 @@ let leibniz_pi d =
     -1
   else
     let rec loop i sum =
-      if d > diff sum then
+      if d >= diff sum then
         i
       else
         loop (i + 1) (sum +. (pi (float_of_int i)))
