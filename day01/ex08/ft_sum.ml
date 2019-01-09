@@ -6,7 +6,7 @@ let ft_sum f low high =
       if i > high then
         sum
       else
-        sum +. (loop (i + 1) (f i))
+        loop (i + 1) (sum +. (f i))
     in
     loop low 0.
 
