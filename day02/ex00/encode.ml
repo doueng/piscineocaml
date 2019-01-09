@@ -1,16 +1,24 @@
-let encode l =
-  let rec loop curr l n new_list =
+let encode (l : 'a list) : (int * 'a) list =
+  let get_hd (lst : 'a list) : 'a =
+    match lst with
+    | hd :: _ -> hd
+    | _ -> failwith "empty lists dont work"
+  in
+  let get_tail (lst : 'a list) : 'a list =
+    match lst with
+    | _ :: tail -> tail
+    | _ -> lst
+  in
+  let rec loop (curr : 'a) (l : 'a list) (n : int) (new_list : (int * 'a) list) =
     match l with
-    | [] -> new_list @ [n, curr] ;
+    | [] -> (new_list @ [n, curr])
     | hd :: tail ->
-      if curr = "" then
-        loop hd tail n new_list
-      else if hd = curr then
+      if hd = curr then
         loop curr tail (n + 1) new_list
       else
         loop hd tail 1 (new_list @ [n, curr])
   in
-  loop "" l 1 []
+  loop (get_hd l) (get_tail l) 1 []
 
 let () =
   let pp_tuple (n, c) =
