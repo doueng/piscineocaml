@@ -25,5 +25,5 @@ let () =
   print_endline (string_of_int (iter (fun x -> x * x) (-2) 4));
   print_string "(x * x) (-2) (-4) == ";
   print_endline (string_of_int (iter (fun x -> x * x) (-2) (-4)));
-  print_string "(x * x ) 2 (-4) == ";
+  print_string "(x * x) 2 (-4) == ";
   print_endline (string_of_int (iter (fun x -> x * x) 2 (-4)));

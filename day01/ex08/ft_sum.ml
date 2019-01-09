@@ -25,3 +25,5 @@ let () =
   print_newline ();
   print_float (ft_sum (fun i -> float_of_int (i * i)) 0 (-10));
   print_newline ();
+  print_float (ft_sum (fun i -> float_of_int (i * i)) 5 5);
+  print_newline ();
