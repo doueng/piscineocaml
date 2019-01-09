@@ -1,5 +1,3 @@
-(* val crossover : 'a list -> 'a list -> 'a list *)
-
 let crossover (alst : 'a list) (blst : 'a list) : 'a list =
   let rec check_blst (to_check : 'a) (blst : 'a list)  : 'a list =
     match blst with
@@ -22,6 +20,7 @@ let () =
     print_newline ();
   in
   print_int_lst (crossover [1; 2; 3; 4] [2; 4]);
+  print_int_lst (crossover [1; 2; 3; 4] [2; 4; 3]);
 
   let print_string_lst lst =
     List.iter
@@ -32,3 +31,4 @@ let () =
   print_string_lst (crossover ["a"; "b"; "c"] ["a"; "a";]);
   print_string_lst (crossover [] ["a"; "a";]);
   print_string_lst (crossover ["a"; "b"; "c"] []);
+  print_string_lst (crossover [] []);
