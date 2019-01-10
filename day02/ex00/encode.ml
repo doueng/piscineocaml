@@ -2,7 +2,7 @@ let encode (l : 'a list) : (int * 'a) list =
   let get_hd (lst : 'a list) : 'a =
     match lst with
     | hd :: _ -> hd
-    | _ -> failwith "empty lists dont work"
+    | _ -> ""
   in
   let get_tail (lst : 'a list) : 'a list =
     match lst with
