@@ -1,7 +1,7 @@
 let encode (l : 'a list) : (int * 'a) list =
   let get_hd (lst : 'a list) : 'a =
     match lst with
-    | [] -> failwith "empty head"
+    | [] -> failwith "Don't pass in an empty list!!!"
     | hd :: _ -> hd
   in
   let get_tail (lst : 'a list) : 'a list =
@@ -22,8 +22,8 @@ let encode (l : 'a list) : (int * 'a) list =
 
 let () =
   let pp_tuple (n, c) =
-    print_string c;
     print_int n;
+    print_string c;
     print_string ", "
   in
   let rec loop l =
@@ -31,19 +31,19 @@ let () =
     | [] -> print_newline ();
     | hd :: tail -> pp_tuple hd; loop tail;
   in
+  loop (encode ["a"; "a"; "a"; "b"; "b"; "b"]);
   loop (encode ["a"; "a"; "a"; "b"; "c"; "c"]);
   loop (encode [""]);
-  loop (encode [])
 
-let () =
-  let pp_tuple (n, i) =
-    print_int i;
+  let pp_tuple_int (n, i) =
     print_int n;
+    print_int i;
     print_string ", "
   in
-  let rec loop l =
+  let rec loop_int l =
     match l with
     | [] -> print_newline();
-    | hd :: tail -> pp_tuple hd; loop tail;
+    | hd :: tail -> pp_tuple_int hd; loop_int tail;
   in
-  loop (encode [1; 2 ;2; 3; 4; 4]);
+  loop_int (encode [1; 2 ;2; 3; 4; 4]);
+  loop_int (encode [])
