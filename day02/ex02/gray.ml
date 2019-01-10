@@ -42,10 +42,7 @@ let gray n =
         print_string "";
       loop (i + 1);
   in
-  if n = 1 then
-    print_endline "0 1"
-  else
-    loop 0
+  loop 0
 
 let () =
   gray (-1);
