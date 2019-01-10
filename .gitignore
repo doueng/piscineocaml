@@ -3,3 +3,6 @@ a.out
 *.cmx
 *.o
 .DS_Store
+a.exe
+.depend
+*.cmo
