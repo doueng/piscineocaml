@@ -22,13 +22,13 @@ let draw_square (x: int) (y: int) (size: int) : unit =
   Graphics.lineto top_right.x top_right.y
 
 let size (tree : 'a tree) : int =
-  let rec loop (node : 'a tree) (size : int) : int =
+  let rec loop (node : 'a tree) : int =
     match node with
-    | Nil -> size;
+    | Nil -> 0;
     | Node (_, l, r) ->
-      loop l (size + 1) + loop r (size + 1);
+      1 + (loop l) + (loop r);
   in
-  loop tree 0
+  loop tree
 
 let height (tree : 'a tree) : int =
   let rec loop (node : 'a tree) (height : int) : int =
