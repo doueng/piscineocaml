@@ -77,7 +77,7 @@ let () =
   print_string "isSpade 3S Heart = ";
   bool_printer (Card.isSpade (Card.newCard T8 Heart));
 
-  print_string "isHeart 3H Heart = ";
+  print_string "isHeart 3S Heart = ";
   bool_printer (Card.isHeart (Card.newCard T8 Heart));
   print_string "isHeart 3S Spade = ";
   bool_printer (Card.isHeart spade_card);
