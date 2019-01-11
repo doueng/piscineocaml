@@ -167,8 +167,15 @@ let toStringVerbose (card : t) : string =
   (Color.toStringVerbose card.color) ^
   ")"
 
-(* COMPARE *)
-(* let compare (first : t) (second : t) : int = *)
+let compare (a : t) (b : t) : int =
+  let first = Value.toInt (getValue a) in
+  let second = Value.toInt (getValue b) in
+  if first = second then
+    0
+  else if first < second then
+    (-1)
+  else
+    1
 
 let max (a : t) (b : t) : t =
   match a.value >= b.value with
@@ -179,3 +186,23 @@ let min (a : t) (b : t) : t =
   match a.value <= b.value with
   | true -> a;
   | false -> b
+
+let best (cards : t list) : t =
+  match cards with
+  | [] -> invalid_arg "Don't pass in an empty list to the best function!!!";
+  | hd :: tl -> List.fold_left (fun best_card card -> max best_card card) hd tl
+
+let isOf (card : t) (color : Color.t) : bool =
+  card.color = color
+
+let isSpade (card : t) : bool =
+  card.color = Spade
+
+let isHeart (card : t) : bool =
+  card.color = Heart
+
+let isDiamond (card : t) : bool =
+  card.color = Diamond
+
+let isClub (card : t) : bool =
+  card.color = Club
