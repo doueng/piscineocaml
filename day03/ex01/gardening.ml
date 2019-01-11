@@ -60,10 +60,8 @@ let draw_tree_node (node : string tree) : unit =
   match node with
   | Nil -> print_endline "Nil tree";
   | Node (v, l, r) ->
-    let root_x = 20
-    in
-    let root_y = 150
-    in
+    let root_x = 20 in
+    let root_y = 150 in
     draw_square root_x root_y square_size;
     Graphics.moveto (root_x - 10) root_y;
     Graphics.draw_string v;
