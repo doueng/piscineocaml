@@ -69,27 +69,27 @@ let () =
   in
   print_string "isOf 3S Spade = ";
   bool_printer (Card.isOf spade_card Spade);
-  print_string "isOf 3S Hearts = ";
+  print_string "isOf 3S Heart = ";
   bool_printer (Card.isOf spade_card Heart);
 
-  print_string "isSpade 3S Spade = ";
+  print_string "isSpade 3 Spade = ";
   bool_printer (Card.isSpade spade_card);
-  print_string "isSpade 3S Heart = ";
+  print_string "isSpade 3 Heart = ";
   bool_printer (Card.isSpade (Card.newCard T8 Heart));
 
-  print_string "isHeart 3S Heart = ";
+  print_string "isHeart 3 Heart = ";
   bool_printer (Card.isHeart (Card.newCard T8 Heart));
-  print_string "isHeart 3S Spade = ";
+  print_string "isHeart 3 Spade = ";
   bool_printer (Card.isHeart spade_card);
 
-  print_string "isDiamond 3D Diamond = ";
+  print_string "isDiamond 3 Diamond = ";
   bool_printer (Card.isDiamond (Card.newCard T8 Diamond));
-  print_string "isDiamond 3S Spade = ";
+  print_string "isDiamond 3 Spade = ";
   bool_printer (Card.isDiamond spade_card);
 
-  print_string "isClub 3C Club = ";
+  print_string "isClub 3 Club = ";
   bool_printer (Card.isClub (Card.newCard T8 Club));
-  print_string "isClub 3S Spade = ";
+  print_string "isClub 3 Spade = ";
   bool_printer (Card.isClub spade_card);
 
   print_string "best [] = ";
