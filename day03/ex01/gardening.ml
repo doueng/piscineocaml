@@ -5,16 +5,10 @@ type point = {
   y : int
 }
 
-let print_point point =
-  print_string (string_of_int point.x);
-  print_string " : ";
-  print_endline (string_of_int point.y)
-
 let draw_square (x: int) (y: int) (size: int) : unit =
   let diff = size / 2 in
   let top_right : point = {x = (x + diff); y = (y + diff)} in
   let bottom_left : point = {x = (x - diff); y = (y - diff)} in
-
   Graphics.moveto top_right.x top_right.y;
   Graphics.lineto (top_right.x - size) top_right.y;
   Graphics.lineto bottom_left.x bottom_left.y;
@@ -40,12 +34,9 @@ let height (tree : 'a tree) : int =
   loop tree 0
 
 let draw_tree_node (node : string tree) : unit =
-  let square_size = 30
-  in
-  let half_size = square_size / 2
-  in
-  let line_len = 30
-  in
+  let square_size = 30 in
+  let half_size = square_size / 2 in
+  let line_len = 30 in
   let multiply_int (n : int) =
     (int_of_float ((float_of_int n) *. 1.2) + 20)
   in
