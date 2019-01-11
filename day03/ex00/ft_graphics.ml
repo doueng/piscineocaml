@@ -48,6 +48,6 @@ let draw_tree_node (node : 'a tree) =
   loop node 200 300
 
 let () =
-  Graphics.open_graph "  ";
+  Graphics.open_graph "";
   draw_tree_node (Node ("42", Nil, Nil));
   print_char (Graphics.read_key())
