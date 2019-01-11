@@ -53,6 +53,7 @@ let printBoard (board : board) : unit =
   in
   loop board
 
+
 let createSmallBoard () : smallBoard =
   List.init 3 (fun _ -> List.init 3 (fun _ -> E))
 
