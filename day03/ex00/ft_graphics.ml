@@ -22,27 +22,32 @@ let draw_square (x: int) (y: int) (size: int) : unit =
   Graphics.lineto top_right.x top_right.y
 
 let draw_tree_node (node : 'a tree) =
-  let loop (curr_point : point) (node : 'a tree) =
-    draw_square curr_point.x curr_point.y 200;
-    Graphics.moveto (curr_point.x - 20) curr_point.y;
+  let square_size = 30
+  in
+  let half_size = square_size / 2
+  in
+  let line_len = 30
+  in
+  let rec loop rec_node x y =
+    draw_square x y square_size;
+    Graphics.moveto (x - 10) y;
     Graphics.draw_string (
-      match node with
+      match rec_node with
       | Nil -> "Nil";
       | Node (v, _, _) -> v);
+    match rec_node with
+    | Nil -> print_string "";
+    | Node (v, l, r) ->
+      Graphics.moveto (x + half_size) (y + half_size);
+      Graphics.lineto (x + line_len) (y + line_len);
+      loop l (x + line_len + half_size) (y + line_len + half_size);
+      Graphics.moveto (x + half_size) (y - half_size);
+      Graphics.lineto (x + line_len) (y -  line_len);
+      loop r (x + line_len + half_size) (y - line_len - half_size);
   in
-  let curr_point = {x = 200; y = 300}
-  in
-  Graphics.moveto curr_point.x curr_point.y;
-  loop curr_point node;
-  Graphics.moveto (curr_point.x + 100) (curr_point.y + 100);
-  Graphics.lineto (curr_point.x + 300) (curr_point.y + 300);
-  loop {x = (curr_point.x + 400); y = (curr_point.y + 400)} Nil;
-  Graphics.moveto (curr_point.x + 100) (curr_point.y - 100);
-  Graphics.lineto (curr_point.x + 300) (curr_point.y - 300);
-  loop {x = (curr_point.x - 400); y = (curr_point.y - 400)} Nil
-
+  loop node 200 300
 
 let () =
-  Graphics.open_graph " 800x600 ";
+  Graphics.open_graph "  ";
   draw_tree_node (Node ("42", Nil, Nil));
   print_char (Graphics.read_key())

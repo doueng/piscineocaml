@@ -6,3 +6,5 @@ a.out
 a.exe
 .depend
 *.cmo
+*._d
+ft_graphics
