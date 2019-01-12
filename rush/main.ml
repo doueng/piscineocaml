@@ -11,6 +11,7 @@ let getCellString (cell : cell) : string =
   | WX -> "WX"
   | WO -> "WO"
 
+(* For debugging *)
 let rec printCells (board : board) : unit =
   match board with
   | [] -> print_newline ();
@@ -23,7 +24,6 @@ let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : 
 
 let updateIndex (board : board) (row : int) (col : int) (newCell : cell) : board =
   List.mapi (fun i c -> if i = (row * 3) + (col * 3) then newCell else c) board
-(* List.mapi (fun i c -> if i =  row * 9 + col then newCell else c) board *)
 
 let printBoard (board : board) : unit =
   let rec loop (b : board) (numRows : int) : unit =
@@ -56,40 +56,8 @@ let printBoard (board : board) : unit =
   in
   loop board 0
 
-(* let checkWinRow (board : board) : cell =
- *   let rec loop (b : board) (c : cell) : cell =
- *     if c <> E then
- *       c
- *     else
- *       match b with
- *       | [] -> E;
- *       | a :: b :: c :: tl->
- *         loop tl (if a = b && b = c then a else E);
- *       | _ -> E;
- *   in
- *   loop board E *)
-
-(* Very bad solution, very slow *)
-(* let checkWinCol (board : board) : cell =
- *   let rec loop (i : int) : cell =
- *     let first = List.nth board i in
- *     let sec = List.nth board (i + 9) in
- *     let third = List.nth board (i + 18) in
- *     if first = sec && sec = third then
- *       first
- *     else if i < (81 - 18) then
- *       loop (i + 1)
- *     else
- *       E
- *   in
- *   loop 0 *)
-(* ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] *)
-
 let getWinGrid (winner: cell) : cell list =
-  if winner = X then
-    List.init 9 (fun _ -> WX)
-  else
-    List.init 9 (fun _ -> WO)
+  List.init 9 (fun _ -> if winner = X then WX else WO)
 
 let updateGrid (board : board) (lastCell : cell) : cell list =
   let checkWin (a : cell) (b : cell) (c : cell) : bool =
@@ -115,32 +83,6 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
     | _ -> newBoard;
   in
   loop board []
-
-
-let checkWin (board : board) : cell =
-  let rec loop (b : board) (c : cell) : cell =
-    if c <> E then
-      c
-    else
-      match b with
-      | [] -> E;
-      | a :: b :: c ::
-        d :: e :: f ::
-        g :: h :: i :: tl->
-        loop tl (
-          (* check row *)
-          if a = b && b = c then a
-          else if d = e && e = f then d
-          else if g = h && h = i then g
-          (* check col *)
-          else if a = d && d = g then a
-          else if d = e && e = f then d
-          else if g = h && h = i then g
-          else E
-        );
-      | _ -> E;
-  in
-  loop board E
 
 
 let convertBoard (board : board) : board =
@@ -197,10 +139,6 @@ let basicBoardTests () =
   print_newline ();
   printBoard (convertBoard (updateGrid winBoardCol X));
   print_newline ()
-(* printBoard winBoardRowPrint;
- * print_endline ((getCellString (checkWin winBoardRow)) ^ " is the winner!!!");
- * printBoard winBoardColPrint;
- * print_endline ((getCellString (checkWin winBoardCol)) ^ " is the winner!!!") *)
 
 let getInput () : string list =
   let xy = read_line ()
@@ -208,7 +146,6 @@ let getInput () : string list =
   if Str.string_match (Str.regexp "[0-8] [0-8]") xy 0 then
     Str.split (Str.regexp " ") xy
   else
-    (* CHECK IF WE CAN USE THIS *)
     failwith "Usage: Input has to be of format <0-8> <0-8>"
 
 let rec mainLoop (board : board) (player : cell) =
@@ -221,5 +158,5 @@ let rec mainLoop (board : board) (player : cell) =
   mainLoop updatedBoard (if player = X then O else X)
 
 let () =
-  basicBoardTests ();
-  (* mainLoop (List.init boardSize (fun _ -> E)) O *)
+  (* basicBoardTests (); *)
+  mainLoop (List.init boardSize (fun _ -> E)) O
