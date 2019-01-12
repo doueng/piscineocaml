@@ -7,7 +7,6 @@ let getCellString (cell : cell) (row : int) (col : int) : string =
   | O -> "O"
   | X -> "X"
   | E -> "-"
-  (* fix  *)
   | WX -> List.nth ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] ((row * 3) + col)
   | WO -> List.nth ["/"; "-"; "\\"; "|"; " "; "|"; "\\"; "-"; "/"] ((row * 3) + col)
 
@@ -21,17 +20,10 @@ let rec printCells (board : board) : unit =
 let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
   List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board
 
-(* let updatedCellIndex = row + (col * 9) in *)
-(* 1 2 = 6 *)
-(* 3 3 = 37 *)
-(* 1 3 = 13 *)
-
 let updateIndex (board : board) (row : int) (col : int) (newCell : cell) : board =
-  let getRightBlock = ((row / 3) * 27) + ((col / 3) * 9) in
-  print_endline ("Right block: " ^ (string_of_int getRightBlock));
-  let updatedCellIndex = getRightBlock + ((row mod 3) * 3) + (col mod 3) in
+  let getRightGrid = ((row / 3) * 27) + ((col / 3) * 9) in
+  let updatedCellIndex = getRightGrid + ((row mod 3) * 3) + (col mod 3) in
   print_endline ("((" ^ (string_of_int updatedCellIndex) ^ "))");
-
   List.mapi (fun i c -> if i = updatedCellIndex then newCell else c) board
 
 let printBoard (board : board) : unit =
@@ -88,6 +80,9 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
          else if checkWin a d g then (getWinGrid a)
          else if checkWin b e h then (getWinGrid b)
          else if checkWin c f i then (getWinGrid c)
+         (* check diagonal *)
+         else if checkWin a e i then (getWinGrid e)
+         else if checkWin g e c then (getWinGrid e)
          else [a; b; c; d; e; f; g; h; i]));
     | _ -> newBoard;
   in
@@ -103,8 +98,6 @@ let convertBoard (board : board) : board =
       let newFirst = first @ [a; b; c] in
       let newSecond = second @ [d; e; f] in
       let newThird = third @ [h; g; i] in
-      (* printCells newFirst; *)
-      (* printCells newSecond; *)
       printCells newThird;
       if (iterator mod 3) = 0 then
         loop tl (newBoard @ newFirst @ newSecond @ newThird) [] [] [] (iterator + 1)
