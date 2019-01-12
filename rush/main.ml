@@ -17,15 +17,16 @@ let rec printCells (board : board) : unit =
   | hd :: tl -> print_string (getCellString hd 0 0);
     printCells tl
 
-let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
-  List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board
+(* let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
+ *   List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board *)
 
-let getCellIndex (board : board) (row : int) (col : int) : int =
+(* change name *)
+let getCell (board : board) (row : int) (col : int) : int =
   let getRightGrid = ((row / 3) * 27) + ((col / 3) * 9) in
   getRightGrid + ((row mod 3) * 3) + (col mod 3)
 
 let updateIndex (board : board) (row : int) (col : int) (newCell : cell) : board =
-  List.mapi (fun i c -> if i = (getCellIndex board row col) then newCell else c) board
+  List.mapi (fun i c -> if i = (getCell board row col) then newCell else c) board
 
 let printBoard (board : board) : unit =
   let rec loop (b : board) (numRows : int) : unit =
@@ -94,17 +95,17 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
   in
   loop board []
 
-(* let getCellIndex (board : board) (row : int) (col : int) : int = *)
+(* let getCell (board : board) (row : int) (col : int) : int = *)
 let checkPlayerWin (board : board) (lastCell : cell) : cell =
-  let a = List.nth board (getCellIndex board 0 0) in
-  let b = List.nth board (getCellIndex board 0 3) in
-  let c = List.nth board (getCellIndex board 0 6) in
-  let d = List.nth board (getCellIndex board 3 0) in
-  let e = List.nth board (getCellIndex board 3 3) in
-  let f = List.nth board (getCellIndex board 3 6) in
-  let g = List.nth board (getCellIndex board 6 0) in
-  let h = List.nth board (getCellIndex board 6 3) in
-  let i = List.nth board (getCellIndex board 6 6) in
+  let a = List.nth board (getCell board 0 0) in
+  let b = List.nth board (getCell board 0 3) in
+  let c = List.nth board (getCell board 0 6) in
+  let d = List.nth board (getCell board 3 0) in
+  let e = List.nth board (getCell board 3 3) in
+  let f = List.nth board (getCell board 3 6) in
+  let g = List.nth board (getCell board 6 0) in
+  let h = List.nth board (getCell board 6 3) in
+  let i = List.nth board (getCell board 6 6) in
   if checkWin a b c then a
   else if checkWin d e f then d
   else if checkWin g h i then g
@@ -126,7 +127,6 @@ let convertBoard (board : board) : board =
       let newFirst = first @ [a; b; c] in
       let newSecond = second @ [d; e; f] in
       let newThird = third @ [h; g; i] in
-      printCells newThird;
       if (iterator mod 3) = 0 then
         loop tl (newBoard @ newFirst @ newSecond @ newThird) [] [] [] (iterator + 1)
       else
@@ -136,42 +136,42 @@ let convertBoard (board : board) : board =
   loop board [] [] [] [] 1
 
 
-let basicBoardTests () =
-  let iniBoard = List.init boardSize (fun _ -> E) in
-  let winBoardRow = (updateIndex
-                       (updateIndex
-                          (updateIndex iniBoard 0 0 O)
-                          1 0 O)
-                       2 0 O)
-  in
-  let winBoardRowPrint = (updateIndexPrint
-                            (updateIndexPrint
-                               (updateIndexPrint iniBoard 0 0 O)
-                               1 0 O)
-                            2 0 O)
-  in
-  let winBoardCol = (updateIndex
-                       (updateIndex
-                          (updateIndex iniBoard 3 1 X)
-                          4 1 X)
-                       5 1 X)
-  in
-  let winBoardColPrint = (updateIndexPrint
-                            (updateIndexPrint
-                               (updateIndexPrint iniBoard 0 0 X)
-                               0 1 X)
-                            0 2 X)
-  in
-  print_endline "before";
-  printCells winBoardCol;
-  print_endline "before colPrint";
-  (* printCells winBoardColPrint; *)
-  print_endline "converted";
-  printCells (convertBoard winBoardCol);
-  printBoard (convertBoard winBoardCol);
-  print_newline ();
-  printBoard (convertBoard (updateGrid winBoardCol X));
-  print_newline ()
+(* let basicBoardTests () =
+ *   let iniBoard = List.init boardSize (fun _ -> E) in
+ *   let winBoardRow = (updateIndex
+ *                        (updateIndex
+ *                           (updateIndex iniBoard 0 0 O)
+ *                           1 0 O)
+ *                        2 0 O)
+ *   in
+ *   let winBoardRowPrint = (updateIndexPrint
+ *                             (updateIndexPrint
+ *                                (updateIndexPrint iniBoard 0 0 O)
+ *                                1 0 O)
+ *                             2 0 O)
+ *   in
+ *   let winBoardCol = (updateIndex
+ *                        (updateIndex
+ *                           (updateIndex iniBoard 3 1 X)
+ *                           4 1 X)
+ *                        5 1 X)
+ *   in
+ *   let winBoardColPrint = (updateIndexPrint
+ *                             (updateIndexPrint
+ *                                (updateIndexPrint iniBoard 0 0 X)
+ *                                0 1 X)
+ *                             0 2 X)
+ *   in
+ *   print_endline "before";
+ *   printCells winBoardCol;
+ *   print_endline "before colPrint";
+ *   (\* printCells winBoardColPrint; *\)
+ *   print_endline "converted";
+ *   printCells (convertBoard winBoardCol);
+ *   printBoard (convertBoard winBoardCol);
+ *   print_newline ();
+ *   printBoard (convertBoard (updateGrid winBoardCol X));
+ *   print_newline () *)
 
 let rec getInput () : string list =
   let xy = read_line ()
