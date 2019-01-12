@@ -2,20 +2,20 @@ type cell = O | X | E | WX | WO
 type board = cell list
 let boardSize = 81
 
-let getCellString (cell : cell) : string =
+let getCellString (cell : cell) (row : int) (col : int) : string =
   match cell with
   | O -> "O"
   | X -> "X"
   | E -> "-"
   (* fix  *)
-  | WX -> "WX"
-  | WO -> "WO"
+  | WX -> List.nth ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] ((row * 3) + col)
+  | WO -> List.nth ["/"; "-"; "\\"; "|"; " "; "|"; "\\"; "-"; "/"] ((row * 3) + col)
 
 (* For debugging *)
 let rec printCells (board : board) : unit =
   match board with
   | [] -> print_newline ();
-  | hd :: tl -> print_string (getCellString hd);
+  | hd :: tl -> print_string (getCellString hd 0 0);
     printCells tl
 
 let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
@@ -30,23 +30,23 @@ let printBoard (board : board) : unit =
     match b with
     | [] -> print_string "";
     | a :: b :: c :: d :: e :: f :: h :: i :: g :: tl ->
-      print_string (getCellString a);
+      print_string (getCellString a numRows 0);
       print_string " ";
-      print_string (getCellString b);
+      print_string (getCellString b numRows 1);
       print_string " ";
-      print_string (getCellString c);
+      print_string (getCellString c numRows 2);
       print_string " | ";
-      print_string (getCellString d);
+      print_string (getCellString d numRows 0);
       print_string " ";
-      print_string (getCellString e);
+      print_string (getCellString e numRows 1);
       print_string " ";
-      print_string (getCellString f);
+      print_string (getCellString f numRows 2);
       print_string " | ";
-      print_string (getCellString h);
+      print_string (getCellString h numRows 0);
       print_string " ";
-      print_string (getCellString i);
+      print_string (getCellString i numRows 1);
       print_string " ";
-      print_string (getCellString g);
+      print_string (getCellString g numRows 2);
       if numRows = 2 || numRows = 5 then
         print_endline "\n---------------------"
       else
