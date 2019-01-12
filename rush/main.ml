@@ -21,12 +21,12 @@ let rec printCells (board : board) : unit =
  *   List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board *)
 
 (* change name *)
-let getCell (board : board) (row : int) (col : int) : int =
+let getCellIndex (board : board) (row : int) (col : int) : int =
   let getRightGrid = ((row / 3) * 27) + ((col / 3) * 9) in
   getRightGrid + ((row mod 3) * 3) + (col mod 3)
 
 let updateIndex (board : board) (row : int) (col : int) (newCell : cell) : board =
-  List.mapi (fun i c -> if i = (getCell board row col) then newCell else c) board
+  List.mapi (fun i c -> if i = (getCellIndex board row col) then newCell else c) board
 
 let printBoard (board : board) : unit =
   let rec loop (b : board) (numRows : int) : unit =
@@ -95,17 +95,17 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
   in
   loop board []
 
-(* let getCell (board : board) (row : int) (col : int) : int = *)
+(* let getCellIndex (board : board) (row : int) (col : int) : int = *)
 let checkPlayerWin (board : board) (lastCell : cell) : cell =
-  let a = List.nth board (getCell board 0 0) in
-  let b = List.nth board (getCell board 0 3) in
-  let c = List.nth board (getCell board 0 6) in
-  let d = List.nth board (getCell board 3 0) in
-  let e = List.nth board (getCell board 3 3) in
-  let f = List.nth board (getCell board 3 6) in
-  let g = List.nth board (getCell board 6 0) in
-  let h = List.nth board (getCell board 6 3) in
-  let i = List.nth board (getCell board 6 6) in
+  let a = List.nth board (getCellIndex board 0 0) in
+  let b = List.nth board (getCellIndex board 0 3) in
+  let c = List.nth board (getCellIndex board 0 6) in
+  let d = List.nth board (getCellIndex board 3 0) in
+  let e = List.nth board (getCellIndex board 3 3) in
+  let f = List.nth board (getCellIndex board 3 6) in
+  let g = List.nth board (getCellIndex board 6 0) in
+  let h = List.nth board (getCellIndex board 6 3) in
+  let i = List.nth board (getCellIndex board 6 6) in
   if checkWin a b c then a
   else if checkWin d e f then d
   else if checkWin g h i then g
