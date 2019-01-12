@@ -62,11 +62,9 @@ let printBoard (board : board) : unit =
 let getWinGrid (winner: cell) : cell list =
   List.init 9 (fun _ -> if winner = X then WX else WO)
 
-let checkWin (a : cell) (b : cell) (c : cell) : bool =
-  a = b && b = c && a <> E
-
-(* LAST CELL *)
 let updateGrid (board : board) (lastCell : cell) : cell list =
+  let checkWin (a : cell) (b : cell) (c : cell) : bool =
+    a = b && b = c && a <> E in
   let rec loop (b : board) (newBoard : board) : cell list =
     match b with
     | [] -> newBoard;
@@ -95,7 +93,10 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
   in
   loop board []
 
+(* LAST CELL check if correct *)
 let checkPlayerWin (board : board) (lastCell : cell) : cell =
+  let checkWin (a : cell) (b : cell) (c : cell) : bool =
+    a = b && b = c && (a = WX || a = WO) in
   let a = List.nth board (getCellIndex board 0 0) in
   let b = List.nth board (getCellIndex board 0 3) in
   let c = List.nth board (getCellIndex board 0 6) in
@@ -115,6 +116,8 @@ let checkPlayerWin (board : board) (lastCell : cell) : cell =
   (* check diagonal *)
   else if checkWin a e i then a
   else if checkWin g e c then g
+  else if (List.find_opt (fun c -> c = E) board)
+          = None then lastCell
   else E
 
 let convertBoard (board : board) : board =
