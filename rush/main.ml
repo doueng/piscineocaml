@@ -173,13 +173,13 @@ let basicBoardTests () =
   printBoard (convertBoard (updateGrid winBoardCol X));
   print_newline ()
 
-let getInput () : string list =
+let rec getInput () : string list =
   let xy = read_line ()
   in
   if Str.string_match (Str.regexp "[0-8] [0-8]") xy 0 then
     Str.split (Str.regexp " ") xy
   else
-    failwith "Usage: Input has to be of format <0-8> <0-8>"
+    getInput ()
 
 let rec mainLoop (board : board) (player : cell) =
   let input = (getInput ()) in
