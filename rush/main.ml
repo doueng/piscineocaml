@@ -22,13 +22,16 @@ let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : 
   List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board
 
 (* let updatedCellIndex = row + (col * 9) in *)
-(* 1 2 = 5 *)
-(* 3 3 = 36 *)
+(* 1 2 = 6 *)
+(* 3 3 = 37 *)
+(* 1 3 = 13 *)
 
 let updateIndex (board : board) (row : int) (col : int) (newCell : cell) : board =
   let getRightBlock = ((row / 3) * 27) + ((col / 3) * 9) in
-  let updatedCellIndex = getRightBlock + (row mod 3) + (col mod 3) in
+  print_endline ("Right block: " ^ (string_of_int getRightBlock));
+  let updatedCellIndex = getRightBlock + ((row mod 3) * 3) + (col mod 3) in
   print_endline ("((" ^ (string_of_int updatedCellIndex) ^ "))");
+
   List.mapi (fun i c -> if i = updatedCellIndex then newCell else c) board
 
 let printBoard (board : board) : unit =
