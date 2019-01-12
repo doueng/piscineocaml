@@ -19,11 +19,17 @@ let rec printCells (board : board) : unit =
     printCells tl
 
 let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
-  let updatedCellIndex = row + (col * 9) in
-  List.mapi (fun i c -> if i = updatedCellIndex then newCell else c) board
+  List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board
+
+(* let updatedCellIndex = row + (col * 9) in *)
+(* 1 2 = 5 *)
+(* 3 3 = 36 *)
 
 let updateIndex (board : board) (row : int) (col : int) (newCell : cell) : board =
-  List.mapi (fun i c -> if i = (row * 3) + (col * 3) then newCell else c) board
+  let getRightBlock = ((row / 3) * 27) + ((col / 3) * 9) in
+  let updatedCellIndex = getRightBlock + (row mod 3) + (col mod 3) in
+  print_endline ("((" ^ (string_of_int updatedCellIndex) ^ "))");
+  List.mapi (fun i c -> if i = updatedCellIndex then newCell else c) board
 
 let printBoard (board : board) : unit =
   let rec loop (b : board) (numRows : int) : unit =
@@ -94,6 +100,9 @@ let convertBoard (board : board) : board =
       let newFirst = first @ [a; b; c] in
       let newSecond = second @ [d; e; f] in
       let newThird = third @ [h; g; i] in
+      (* printCells newFirst; *)
+      (* printCells newSecond; *)
+      printCells newThird;
       if (iterator mod 3) = 0 then
         loop tl (newBoard @ newFirst @ newSecond @ newThird) [] [] [] (iterator + 1)
       else
@@ -119,9 +128,9 @@ let basicBoardTests () =
   in
   let winBoardCol = (updateIndex
                        (updateIndex
-                          (updateIndex iniBoard 0 0 X)
-                          1 0 X)
-                       2 0 X)
+                          (updateIndex iniBoard 3 1 X)
+                          4 1 X)
+                       5 1 X)
   in
   let winBoardColPrint = (updateIndexPrint
                             (updateIndexPrint
@@ -154,6 +163,7 @@ let rec mainLoop (board : board) (player : cell) =
       (int_of_string (List.nth input 0))
       (int_of_string (List.nth input 1))
       player in
+  printCells updatedBoard;
   printBoard (convertBoard (updateGrid updatedBoard player));
   mainLoop updatedBoard (if player = X then O else X)
 
