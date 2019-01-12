@@ -7,8 +7,8 @@ let getCellString (cell : cell) (row : int) (col : int) : string =
   | O -> "O"
   | X -> "X"
   | E -> "-"
-  | WX -> List.nth ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] ((row * 3) + col)
-  | WO -> List.nth ["/"; "-"; "\\"; "|"; " "; "|"; "\\"; "-"; "/"] ((row * 3) + col)
+  | WX -> List.nth ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] (((row mod 3) * 3) + col)
+  | WO -> List.nth ["/"; "-"; "\\"; "|"; " "; "|"; "\\"; "-"; "/"] (((row mod 3) * 3) + col)
 
 (* For debugging *)
 let rec printCells (board : board) : unit =
@@ -95,7 +95,6 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
   in
   loop board []
 
-(* let getCellIndex (board : board) (row : int) (col : int) : int = *)
 let checkPlayerWin (board : board) (lastCell : cell) : cell =
   let a = List.nth board (getCellIndex board 0 0) in
   let b = List.nth board (getCellIndex board 0 3) in
@@ -187,7 +186,7 @@ let rec mainLoop (board : board) (player : cell) =
       (int_of_string (List.nth input 0))
       (int_of_string (List.nth input 1))
       player in
-  printCells updatedBoard;
+  print_endline (getCellString (checkPlayerWin board player) 0 0);
   printBoard (convertBoard (updateGrid updatedBoard player));
   mainLoop updatedBoard (if player = X then O else X)
 
