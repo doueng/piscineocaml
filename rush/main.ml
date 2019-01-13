@@ -53,7 +53,20 @@ let rec getInput board : int list =
   if checkError board xy then getInput board
   else [char_to_int(String.get xy 0) - 1; char_to_int(String.get xy 2) - 1]
 
-let rec mainLoop (board : Tictac.board) (player : Tictac.cell) =
+let createBoard () : Tictac.board =
+  List.init 81 (fun _ -> Tictac.E)
+
+let rec restartMatch () =
+  print_endline "Do you want to restart the match? y/n";
+  let yn = read_line () in
+  if (String.length yn) <> 1 then
+    restartMatch ()
+  else if String.compare yn "y" = 0 then
+    mainLoop (createBoard()) Tictac.O
+  else if (String.compare yn "n") = 0 then
+    print_endline "Goodbye"
+
+and mainLoop (board : Tictac.board) (player : Tictac.cell) =
   print_endline ((Printing.getCellString player 0 0) ^ "'s turn to play.");
   let input = (getInput board) in
   let updatedBoard = UpdateGrid.updateGrid
@@ -62,7 +75,10 @@ let rec mainLoop (board : Tictac.board) (player : Tictac.cell) =
   Printing.printBoard (Converter.convertBoard updatedBoard);
   let winner  = checkPlayerWin updatedBoard player in
   if winner <> E then
-    Printing.printWinner winner
+    begin
+      Printing.printWinner winner;
+      restartMatch();
+    end
   else
     mainLoop updatedBoard (if player = X then O else X)
 
