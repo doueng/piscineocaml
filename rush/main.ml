@@ -60,11 +60,11 @@ let rec getInput board : int list =
     [char_to_int(String.get xy 0) - 1; char_to_int(String.get xy 2) - 1]
 
 let rec mainLoop (board : Tictac.board) (player : Tictac.cell) =
+  print_endline ((Printing.getCellString player 0 0) ^ "'s turn to play.");
   let input = (getInput board) in
   let updatedBoard = UpdateGrid.updateGrid
       (updateIndex board (List.nth input 0) (List.nth input 1) player)
       player in
-  printCells updatedBoard;
   Printing.printBoard (Converter.convertBoard updatedBoard);
   let winner  = checkPlayerWin updatedBoard player in
   if winner <> E then
@@ -73,4 +73,5 @@ let rec mainLoop (board : Tictac.board) (player : Tictac.cell) =
     mainLoop updatedBoard (if player = X then O else X)
 
 let () =
+  print_endline "Welcome to tictactoe !!!\n Input x and y coorinates between 1 and 9";
   mainLoop (List.init 81 (fun _ -> Tictac.E)) O
