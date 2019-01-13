@@ -7,8 +7,8 @@ let getCellString (cell : cell) (row : int) (col : int) : string =
   | O -> "O"
   | X -> "X"
   | E -> "-"
-  | WX -> List.nth ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] (((row mod 3) * 3) + col)
-  | WO -> List.nth ["/"; "-"; "\\"; "|"; " "; "|"; "\\"; "-"; "/"] (((row mod 3) * 3) + col)
+  | WX -> List.nth ["\\"; " "; "/"; " "; "X"; " "; "/"; " "; "\\"] ((row * 3) + col)
+  | WO -> List.nth ["/"; "-"; "\\"; "|"; " "; "|"; "\\"; "-"; "/"] ((row * 3) + col)
 
 (* For debugging *)
 let rec printCells (board : board) : unit =
@@ -17,10 +17,9 @@ let rec printCells (board : board) : unit =
   | hd :: tl -> print_string (getCellString hd 0 0);
     printCells tl
 
-(* let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
- *   List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board *)
+let updateIndexPrint (board : board) (row : int) (col : int) (newCell : cell) : board =
+  List.mapi (fun i c -> if i = row + (col * 9) then newCell else c) board
 
-(* change name *)
 let getCellIndex (board : board) (row : int) (col : int) : int =
   let getRightGrid = ((row / 3) * 27) + ((col / 3) * 9) in
   getRightGrid + ((row mod 3) * 3) + (col mod 3)
@@ -62,9 +61,11 @@ let printBoard (board : board) : unit =
 let getWinGrid (winner: cell) : cell list =
   List.init 9 (fun _ -> if winner = X then WX else WO)
 
+let checkWin (a : cell) (b : cell) (c : cell) : bool =
+  a = b && b = c && a <> E
+
+(* LAST CELL *)
 let updateGrid (board : board) (lastCell : cell) : cell list =
-  let checkWin (a : cell) (b : cell) (c : cell) : bool =
-    a = b && b = c && a <> E in
   let rec loop (b : board) (newBoard : board) : cell list =
     match b with
     | [] -> newBoard;
@@ -93,10 +94,8 @@ let updateGrid (board : board) (lastCell : cell) : cell list =
   in
   loop board []
 
-(* LAST CELL check if correct *)
+(* let getCellIndex (board : board) (row : int) (col : int) : int = *)
 let checkPlayerWin (board : board) (lastCell : cell) : cell =
-  let checkWin (a : cell) (b : cell) (c : cell) : bool =
-    a = b && b = c && (a = WX || a = WO) in
   let a = List.nth board (getCellIndex board 0 0) in
   let b = List.nth board (getCellIndex board 0 3) in
   let c = List.nth board (getCellIndex board 0 6) in
@@ -116,8 +115,6 @@ let checkPlayerWin (board : board) (lastCell : cell) : cell =
   (* check diagonal *)
   else if checkWin a e i then a
   else if checkWin g e c then g
-  else if (List.find_opt (fun c -> c = E) board)
-          = None then lastCell
   else E
 
 let convertBoard (board : board) : board =
@@ -129,6 +126,7 @@ let convertBoard (board : board) : board =
       let newFirst = first @ [a; b; c] in
       let newSecond = second @ [d; e; f] in
       let newThird = third @ [h; g; i] in
+      printCells newThird;
       if (iterator mod 3) = 0 then
         loop tl (newBoard @ newFirst @ newSecond @ newThird) [] [] [] (iterator + 1)
       else
@@ -138,58 +136,68 @@ let convertBoard (board : board) : board =
   loop board [] [] [] [] 1
 
 
-(* let basicBoardTests () =
- *   let iniBoard = List.init boardSize (fun _ -> E) in
- *   let winBoardRow = (updateIndex
- *                        (updateIndex
- *                           (updateIndex iniBoard 0 0 O)
- *                           1 0 O)
- *                        2 0 O)
- *   in
- *   let winBoardRowPrint = (updateIndexPrint
- *                             (updateIndexPrint
- *                                (updateIndexPrint iniBoard 0 0 O)
- *                                1 0 O)
- *                             2 0 O)
- *   in
- *   let winBoardCol = (updateIndex
- *                        (updateIndex
- *                           (updateIndex iniBoard 3 1 X)
- *                           4 1 X)
- *                        5 1 X)
- *   in
- *   let winBoardColPrint = (updateIndexPrint
- *                             (updateIndexPrint
- *                                (updateIndexPrint iniBoard 0 0 X)
- *                                0 1 X)
- *                             0 2 X)
- *   in
- *   print_endline "before";
- *   printCells winBoardCol;
- *   print_endline "before colPrint";
- *   (\* printCells winBoardColPrint; *\)
- *   print_endline "converted";
- *   printCells (convertBoard winBoardCol);
- *   printBoard (convertBoard winBoardCol);
- *   print_newline ();
- *   printBoard (convertBoard (updateGrid winBoardCol X));
- *   print_newline () *)
+let basicBoardTests () =
+  let iniBoard = List.init boardSize (fun _ -> E) in
+  let winBoardRow = (updateIndex
+                       (updateIndex
+                          (updateIndex iniBoard 0 0 O)
+                          1 0 O)
+                       2 0 O)
+  in
+  let winBoardRowPrint = (updateIndexPrint
+                            (updateIndexPrint
+                               (updateIndexPrint iniBoard 0 0 O)
+                               1 0 O)
+                            2 0 O)
+  in
+  let winBoardCol = (updateIndex
+                       (updateIndex
+                          (updateIndex iniBoard 3 1 X)
+                          4 1 X)
+                       5 1 X)
+  in
+  let winBoardColPrint = (updateIndexPrint
+                            (updateIndexPrint
+                               (updateIndexPrint iniBoard 0 0 X)
+                               0 1 X)
+                            0 2 X)
+  in
+  print_endline "before";
+  printCells winBoardCol;
+  print_endline "before colPrint";
+  (* printCells winBoardColPrint; *)
+  print_endline "converted";
+  printCells (convertBoard winBoardCol);
+  printBoard (convertBoard winBoardCol);
+  print_newline ();
+  printBoard (convertBoard (updateGrid winBoardCol X));
+  print_newline 
 
-let rec getInput () : string list =
+let char_to_int c =
+  int_of_string (String.make 1 c)
+let checkError board str =
+  if String.length str <> 3
+    || String.get str 0 < '1'
+    || String.get str 0 > '9'
+    || String.get str 1 <> ' '
+    || String.get str 2 < '1'
+    || String.get str 2 > '9'
+    then ( print_endline "Wrong input formating, please try again: " ; true )
+  else if List.nth board (getCellIndex board (char_to_int(String.get str 0) - 1) (char_to_int(String.get str 2) - 1)) <> E 
+    then ( print_endline "Cell has already been played, please try again: "; true )
+  else false 
+
+let rec getInput board : int list =
   let xy = read_line ()
   in
-  if Str.string_match (Str.regexp "[0-8] [0-8]") xy 0 then
-    Str.split (Str.regexp " ") xy
+  if checkError board xy then getInput board
   else
-    getInput ()
+    [char_to_int(String.get xy 0) - 1; char_to_int(String.get xy 2) - 1]
 
 let rec mainLoop (board : board) (player : cell) =
-  let input = (getInput ()) in
-  let updatedBoard = updateIndex board
-      (int_of_string (List.nth input 0))
-      (int_of_string (List.nth input 1))
-      player in
-  print_endline (getCellString (checkPlayerWin board player) 0 0);
+  let input = (getInput board) in
+  let updatedBoard = updateIndex board (List.nth input 0) (List.nth input 1) player in
+  printCells updatedBoard;
   printBoard (convertBoard (updateGrid updatedBoard player));
   mainLoop updatedBoard (if player = X then O else X)
 
