@@ -25,7 +25,9 @@ let checkPlayerWin (board : Tictac.board) (lastCell : Tictac.cell) : Tictac.cell
   (* check diagonal *)
   else if checkWin a e i then a
   else if checkWin g e c then g
-  else if (List.find_opt (fun c -> c = Tictac.E) board = None) then lastCell
+  else if
+    (List.find_opt (fun c -> c = Tictac.E) board = None)
+  then (if lastCell = O then WO else WX)
   else E
 
 let char_to_int c =
