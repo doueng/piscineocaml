@@ -1,5 +1,4 @@
 RESULT = tictactoe
-SOURCES = main.ml
-LIBS = str
+SOURCES = Tictac.ml Printing.ml Converter.ml UpdateGrid.ml main.ml 
 OCAMLMAKEFILE = OCamlMakefile
 include $(OCAMLMAKEFILE)

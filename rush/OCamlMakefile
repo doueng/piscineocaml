@@ -8,7 +8,6 @@
 ###########################################################################
 
 # Modified by damien for .glade.ml compilation
-
 # Set these variables to the names of the sources to be processed and
 # the result variable. Order matters during linkage!
 
