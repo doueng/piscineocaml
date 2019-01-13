@@ -47,11 +47,9 @@ let updateIndex (board : Tictac.board) (row : int) (col : int) (newCell : Tictac
   List.mapi (fun i c -> if i = (getCellIndex board row col) then newCell else c) board
 
 let rec getInput board : int list =
-  let xy = read_line ()
-  in
+  let xy = read_line () in
   if checkError board xy then getInput board
-  else
-    [char_to_int(String.get xy 0) - 1; char_to_int(String.get xy 2) - 1]
+  else [char_to_int(String.get xy 0) - 1; char_to_int(String.get xy 2) - 1]
 
 let rec mainLoop (board : Tictac.board) (player : Tictac.cell) =
   print_endline ((Printing.getCellString player 0 0) ^ "'s turn to play.");
