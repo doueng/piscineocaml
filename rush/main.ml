@@ -2,12 +2,6 @@ let getCellIndex (board : Tictac.board) (row : int) (col : int) : int =
   let getRightGrid = ((row / 3) * 27) + ((col / 3) * 9) in
   getRightGrid + ((row mod 3) * 3) + (col mod 3)
 
-let rec printCells board =
-  match board with
-  | [] -> print_newline();
-  | hd :: tl -> print_string (Printing.getCellString hd 0 0);
-    printCells tl
-
 let checkPlayerWin (board : Tictac.board) (lastCell : Tictac.cell) : Tictac.cell =
   let checkWin (a : Tictac.cell) (b : Tictac.cell) (c : Tictac.cell) : bool =
     a = b && b = c && (a = WO || a = WX) in
