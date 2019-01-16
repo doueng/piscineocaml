@@ -79,7 +79,6 @@ module type MAKE =
 module Make : MAKE =
   functor (Bits : FRACTIONAL_BITS) ->
   struct
-
   end
 
 module Fixed4 : FIXED = Make (struct let bits = 4 end)

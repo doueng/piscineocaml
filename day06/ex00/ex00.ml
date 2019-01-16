@@ -1,7 +1,7 @@
 module StringOrder =
 struct
   type t = string
-  let compare (a : t) (b : t) : int = Pervasives.compare a b
+  let compare (a : t) (b : t) : int = if a = b then 0 else if a < b then (-1) else 1
 end
 
 module StringSet = Set.Make(StringOrder)
