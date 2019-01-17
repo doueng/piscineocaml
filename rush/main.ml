@@ -48,25 +48,28 @@ let checkError board str =
 let updateIndex (board : Tictac.board) (row : int) (col : int) (newCell : Tictac.cell) : Tictac.board =
   List.mapi (fun i c -> if i = (getCellIndex board row col) then newCell else c) board
 
+let updateFromIndex (board : Tictac.board) index (newCell : Tictac.cell) : Tictac.board =
+  List.mapi (fun i c -> if i = index then newCell else c) board
+
 let rec getInput board : int list =
   let xy = read_line () in
   if checkError board xy then getInput board
   else [char_to_int(String.get xy 0) - 1; char_to_int(String.get xy 2) - 1]
 
-let createBoard () : Tictac.board =
-  List.init 81 (fun _ -> Tictac.E)
+let rec mainLoop_X board player =
+let input = (Ia.iaPlays board) in
+  let updatedBoard = UpdateGrid.updateGrid
+      (updateFromIndex board input player)
+      player in
+  print_endline "IA plays..." ;
+  Printing.printBoard (Converter.convertBoard updatedBoard);
+  let winner  = checkPlayerWin updatedBoard player in
+  if winner <> E then
+    Printing.printWinner winner
+  else
+    mainLoop_O updatedBoard Tictac.O true
 
-let rec restartMatch () =
-  print_endline "Do you want to restart the match? y/n";
-  let yn = read_line () in
-  if (String.length yn) <> 1 then
-    restartMatch ()
-  else if String.compare yn "y" = 0 then
-    mainLoop (createBoard()) Tictac.O
-  else if (String.compare yn "n") = 0 then
-    print_endline "Goodbye"
-
-and mainLoop (board : Tictac.board) (player : Tictac.cell) =
+and mainLoop_O (board : Tictac.board) (player : Tictac.cell) (ia: bool) =
   print_endline ((Printing.getCellString player 0 0) ^ "'s turn to play.");
   let input = (getInput board) in
   let updatedBoard = UpdateGrid.updateGrid
@@ -75,13 +78,27 @@ and mainLoop (board : Tictac.board) (player : Tictac.cell) =
   Printing.printBoard (Converter.convertBoard updatedBoard);
   let winner  = checkPlayerWin updatedBoard player in
   if winner <> E then
-    begin
-      Printing.printWinner winner;
-      restartMatch();
-    end
-  else
-    mainLoop updatedBoard (if player = X then O else X)
+    Printing.printWinner winner
+  else (
+      if ia = true then mainLoop_X updatedBoard Tictac.X
+      else mainLoop_O updatedBoard (if player = Tictac.O then Tictac.X else Tictac.O) false
+  )
 
 let () =
   print_endline "Welcome to tictactoe !!!\n Input x and y coorinates between 1 and 9";
-  mainLoop (List.init 81 (fun _ -> Tictac.E)) O
+  let rec prompt () =
+      print_endline "Do you want to play against the AI ? [Y/n]";
+      let board = List.init 81 (fun _ -> Tictac.E) in
+      let answer = read_line () in
+      if ((String.compare answer "Y") = 0) || ((String.compare answer "y") = 0) then
+          mainLoop_O board Tictac.O true
+      else if ((String.compare answer "N") = 0) || ((String.compare answer "n") = 0) then
+          mainLoop_O board Tictac.O false
+      else prompt ()
+  in prompt () ;
+  print_endline ("Thank you ! Wanna play again ? (Press Y to play again, any other key to quit)") ;
+  let key = read_line () in
+  if ((String.compare key "Y") = 0) || ((String.compare key "y") = 0) then prompt ()
+  else ()
+  
+
