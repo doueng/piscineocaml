@@ -6,7 +6,5 @@ class ['a] army (list : 'a list) =
     method delete = _battalion <-
         match _battalion with
         | [] -> [];
-        | hd :: tl -> tl
-        (* method delete = _battalion <- List.mapi (fun i c -> *)
-        (* if i < (List.length _battalion) - 1 then c) _battalion *)
+        | hd :: tl -> tl;
   end

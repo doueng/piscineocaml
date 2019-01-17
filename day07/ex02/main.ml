@@ -1,6 +1,6 @@
 let () =
   let human = new People.people "Douglas" in
-  let doctor = new Doctor.doctor "Doctor" in
+  let doctor = new Doctor.doctor "Doctor" 10 (new People.people "sidekick") in
   let dalek = new Dalek.dalek in
   print_endline human#to_string;
   print_endline doctor#to_string;
