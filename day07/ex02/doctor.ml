@@ -30,5 +30,5 @@ _______(_@_)_______
  | ||_|| | ||_|| |
  |       |       |
  *****************"
-    method private reset = _hp <- 100
+    method private regenerate = _hp <- 100
   end
