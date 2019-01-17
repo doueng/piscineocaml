@@ -11,7 +11,8 @@ class doctor (name : string) (age : int) (sidekick : People.people) =
                        ^ "\nAge: " ^ (string_of_int _age)
     method talk =  print_endline "Hi! I’m the Doctor!"
     method use_sonic_screwdriver  = print_endline "Whiiiiwhiiiwhiii Whiiiiwhiiiwhiii Whiiiiwhiiiwhiii"
-    method travel_in_time (start : int) (arrival : int) = _age <- arrival - start + _age;
+    method travel_in_time (start : int) (arrival : int) =
+      _age <- arrival - start + _age;
       print_endline "
 _______(_@_)_______
 | POLICE      BOX |
@@ -30,5 +31,5 @@ _______(_@_)_______
  | ||_|| | ||_|| |
  |       |       |
  *****************"
-    method private reset = _hp <- 100
+    method private regenerate = _hp <- 100
   end
