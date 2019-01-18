@@ -13,7 +13,7 @@ module INT : (MONOID with type element = int) =
 struct
   type element = int
   let zero1 = 0
-  let zero2 = 0
+  let zero2 = 1
   let mul = ( * )
   let add = ( + )
   let div = ( / )
@@ -24,7 +24,7 @@ module FLOAT : (MONOID with type element = float) =
 struct
   type element = float
   let zero1 = 0.
-  let zero2 = 0.
+  let zero2 = 1.
   let mul = ( *. )
   let add = ( +. )
   let div = ( /. )
@@ -65,7 +65,7 @@ module Calc : CALC =
         else
           loop (M.sub n (M.div n n)) (M.mul res n)
       in
-      if n = (M.zero1) then n
+      if n = (M.zero1) then M.zero2
       else loop n (M.div n n)
   end
 
@@ -78,6 +78,7 @@ let () =
   print_endline (string_of_float (Calc_float.power 3.0 3));
   print_endline (string_of_int (Calc_int.mul (Calc_int.add 20 1) 2));
   print_endline (string_of_float (Calc_float.mul (Calc_float.add 20.0 1.0) 2.0));
+
   let print_bool b = print_endline (string_of_bool b) in
 
   print_endline "ADD INT";
@@ -151,27 +152,32 @@ let () =
   print_endline "POWER";
   let op = ( ** ) in
   let myop = Calc_int.power in
-  print_bool ((myop (-3) (-3)) = int_of_float (op (-.3.) (-.3.)));
   print_bool ((myop (-3) 3) = int_of_float (op (-.3.) 3.));
-  print_bool ((myop 3 (-6)) = int_of_float (op 3. (-.6.)));
   print_bool ((myop 0 1) = int_of_float (op 0. 1.));
   print_bool ((myop 3 1) = int_of_float (op 3. 1.));
   print_bool ((myop 10 3) = int_of_float (op 10. 3.));
   print_endline "POWER FLOAT";
   let op = ( ** ) in
   let myop = Calc_float.power in
-  print_bool ((myop (-.3.) (-3)) = (op (-.3.) (-.3.)));
   print_bool ((myop (-.3.) 3) = (op (-.3.) 3.));
-  print_bool ((myop 3. (-6)) = (op 3. (-.6.)));
   print_bool ((myop 0. 1) = (op 0. 1.));
   print_bool ((myop 10. 3) = (op 10. 3.));
 
   print_endline "FACTORIAL";
   let rec op n =
     if n = 0 then 1
-    else n * op (n-1)
+    else n * op (n - 1)
   in
   let myop = Calc_int.fact in
   print_bool (myop 3 = op 3);
-  (* print_bool (myop 0 = op 0); *)
+  print_bool (myop 0 = op 0);
   print_bool (myop 10 = op 10);
+  print_endline "FACTORIAL FLOAT";
+  let rec op n =
+    if n = 0. then 1.
+    else n *. op (n -. 1.)
+  in
+  let myop = Calc_float.fact in
+  print_bool (myop 3. = op 3.);
+  print_bool (myop 0. = op 0.);
+  print_bool (myop 10. = op 10.);
