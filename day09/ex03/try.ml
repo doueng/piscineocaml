@@ -50,8 +50,10 @@ let () =
     | Success (ret) -> print_endline ret;
     | Failure (ret) -> print_endline "bind Failure"
   in
-  print_bind (Success "bind Success") (fun (a : 'a) -> Try.Failure (Invalid_argument "hello"));
-  print_bind (Failure (Invalid_argument "lol")) (fun (a : 'a) -> Try.Failure (Invalid_argument "hello"));
+  print_bind (Success "rofl") (fun (a : 'a) -> Failure (Invalid_argument "hello"));
+  print_bind (Success "rofl") (fun (a : 'a) -> Success "bind Success" );
+  print_bind (Failure (Invalid_argument "lol")) (fun (a : 'a) -> Failure (Invalid_argument "hello"));
+  print_bind (Failure (Invalid_argument "lol")) (fun (a : 'a) -> Success "hello" );
   print_endline "----------------------------------------";
 
   let print_recover  x f =
